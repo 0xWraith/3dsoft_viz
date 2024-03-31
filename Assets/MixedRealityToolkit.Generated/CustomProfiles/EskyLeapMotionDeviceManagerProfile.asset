@@ -17,8 +17,9 @@ MonoBehaviour:
   leapControllerOffset: {x: 0, y: -0.2, z: 0.2}
   enterPinchDistance: 0.02
   exitPinchDistance: 0.05
-  rigToUse: 0
-  customRig: {fileID: 0}
+  rigToUse: 5
+  customRig: {fileID: 8316358254623901532, guid: 83b73f95bb7f772479a996d97a6d2938,
+    type: 3}
   sensorOffsets:
     TranslationEyeToLeapMotion: {x: 0, y: 0, z: 0}
     RotationEyeToLeapMotion: {x: 0, y: 0, z: 0, w: 0}
@@ -152,6 +153,6 @@ MonoBehaviour:
     SensorFoV: 0
   usesExternalRGBCamera: 0
   useNetworkingDebugRig: 0
-  filterSystemToUse: 0
+  filterSystemToUse: 1
   useTrackerOffsets: 0
   saveAfterStoppingEditor: 1

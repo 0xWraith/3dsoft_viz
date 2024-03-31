@@ -257,8 +257,8 @@
         }
     },
     "displayWindowSettings": {
-        "DisplayXLoc": 0,
-        "DisplayYLoc": 1080,
+        "DisplayXLoc": 3456,
+        "DisplayYLoc": 0,
         "DisplayWidth": 2880,
         "DisplayHeight": 1600,
         "EyeTextureWidth": 1600,
