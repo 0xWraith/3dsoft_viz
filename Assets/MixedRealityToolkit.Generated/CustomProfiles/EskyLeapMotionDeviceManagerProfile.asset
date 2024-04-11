@@ -18,7 +18,7 @@ MonoBehaviour:
   enterPinchDistance: 0.02
   exitPinchDistance: 0.05
   rigToUse: 5
-  customRig: {fileID: 8316358254623901532, guid: 83b73f95bb7f772479a996d97a6d2938,
+  customRig: {fileID: 6075467949922931448, guid: 22e5fd901338d8e468fb1e03459d1f06,
     type: 3}
   sensorOffsets:
     TranslationEyeToLeapMotion: {x: 0, y: 0, z: 0}

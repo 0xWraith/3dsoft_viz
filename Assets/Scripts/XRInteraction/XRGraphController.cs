@@ -27,31 +27,31 @@ public class XRGraphController : GraphController
 
         // As MRTK doesnt provide getter for active state of teleport system,
         // when we dont enable teleportation, we dont place ground object
-        GameObject ground = GameObject.FindGameObjectWithTag("Ground");
-        if (ground != null)
-        {
-            if (layoutingCalled) {
-                layoutingRunningTime += Time.deltaTime;
-            }
+        // GameObject ground = GameObject.FindGameObjectWithTag("Ground");
+        // if (ground != null)
+        // {
+        //     if (layoutingCalled) {
+        //         layoutingRunningTime += Time.deltaTime;
+        //     }
 
-            // We have to set proper ground height so we can navigate.
-            // To determine position where the ground should be, we wait approximatelly 12s, in that time graph is usually fully layouted.
-            // Then we get a position of the lowest node and set position based on that.
+        //     // We have to set proper ground height so we can navigate.
+        //     // To determine position where the ground should be, we wait approximatelly 12s, in that time graph is usually fully layouted.
+        //     // Then we get a position of the lowest node and set position based on that.
 
-            if (layoutingCalled && !groundPositionSet && layoutingRunningTime > 12f) {
-                GameObject[] nodes = GameObject.FindGameObjectsWithTag("XRNode");
+        //     if (layoutingCalled && !groundPositionSet && layoutingRunningTime > 12f) {
+        //         GameObject[] nodes = GameObject.FindGameObjectsWithTag("XRNode");
 
-                List<Transform> transforms = new List<Transform>();
+        //         List<Transform> transforms = new List<Transform>();
 
-                foreach(GameObject node in nodes) {
-                    transforms.Add(node.transform);
-                }
+        //         foreach(GameObject node in nodes) {
+        //             transforms.Add(node.transform);
+        //         }
 
-                var lowestNode = transforms.OrderBy(t => t.position.y).First();
-                ground.transform.position = new Vector3(0, lowestNode.position.y, 0);
-                groundPositionSet = true;
-            }
-        }
+        //         var lowestNode = transforms.OrderBy(t => t.position.y).First();
+        //         ground.transform.position = new Vector3(0, lowestNode.position.y, 0);
+        //         groundPositionSet = true;
+        //     }
+        // }
 
     }
 

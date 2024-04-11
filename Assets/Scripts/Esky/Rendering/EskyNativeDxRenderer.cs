@@ -164,6 +164,7 @@ namespace BEERLabs.ProjectEsky.Rendering{
         public GameObject LeapMotionCamera;
         public BEERLabs.ProjectEsky.Tracking.EskyTrackerIntel myAttachedTracker;
         public BEERLabs.ProjectEsky.Tracking.EskyTrackerX myAttachedTrackerX;
+        public BEERLabs.ProjectEsky.Tracking.EskyTrackerZed myAttachedTrackerZed;
         public GameObject RigCenter;
         [Range(0,1)]
         public float RenderedGraphicsBrightness = 1.0f;

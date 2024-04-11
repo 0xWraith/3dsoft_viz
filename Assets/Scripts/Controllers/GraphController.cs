@@ -323,9 +323,9 @@ namespace Softviz.Controllers
             API_out.UpdateNodes();
 
             // todo(hrumy): WIP, bugs out
-            API_out.GetNodeMetricsColumn();
-            API_out.GetNodeLabelColumn();
-            API_out.GetNodeInfoflowMetricsColumn();
+            // API_out.GetNodeMetricsColumn();
+            // API_out.GetNodeLabelColumn();
+            // API_out.GetNodeInfoflowMetricsColumn();
 
             API_out.GetNodeIdColumn();
             API_out.GetNodeShapeColumn();
