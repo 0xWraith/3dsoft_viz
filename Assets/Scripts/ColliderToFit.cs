@@ -16,6 +16,13 @@ namespace XRInteraction
         [SerializeField] GameObject parentObject;
 
         public BoxCollider bc;
+        private Vector3    offset;
+
+
+        private void Start() 
+        {
+            offset = transform.localPosition + transform.parent.localPosition;    
+        }
 
         public void FitColliderToChildren()
         {
@@ -35,10 +42,11 @@ namespace XRInteraction
                     hasBounds = true;
                 }
             }
+
             // Setting final collider size
             if (hasBounds)
             {
-                bc.center = /*bounds.center -*/ parentObject.transform.localPosition;
+                bc.center = bounds.center - offset; // /*bounds.center -*/ parentObject.transform.localPosition;
                 bc.size = bounds.size;
             }
             else

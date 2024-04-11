@@ -7433,7 +7433,19 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 42f40fd9294bfa041a76d7f4068ae3c2, type: 2}
   OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5527308442879102188}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   Events:
   - Event:
       m_PersistentCalls:
@@ -13708,6 +13720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   minRadiusSphere: {fileID: 6471438416688241631}
   maxRadiusSphere: {fileID: 2182883671618587894}
   minRadius: 0

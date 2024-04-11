@@ -27,6 +27,7 @@ namespace Communication
                 {"getNodeInfoflowMetricsColumn", GetNodeInfoflowMetricsColumn},
                 {"getNodeTypeColumn", GetNodeTypeColumn},
                 {"getNodeBodyColumn", GetNodeBodyColumn},
+                {"getNodeIsFixedColumn", GetNodeIsFixedColumn},
 
                 {"getEdgeColorColumn", GetEdgeColorColumn},
                 {"getEdgeDestinationIdColumn", GetEdgeDestinationIdColumn},
@@ -125,6 +126,11 @@ namespace Communication
         private static void GetNodeBodyColumn(string result)
         {
             SynchEventProcessor.Enqueue(() => GraphController.Instance.UpdateNodesBody(result));
+            /// TODO prerobit (metoda v ClientGraphe)
+        }
+        private static void GetNodeIsFixedColumn(string result)
+        {
+            SynchEventProcessor.Enqueue(() => GraphController.Instance.UpdateNodesIsFixed(result));
             /// TODO prerobit (metoda v ClientGraphe)
         }
         #endregion NodeColumns

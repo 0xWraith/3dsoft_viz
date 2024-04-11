@@ -6,6 +6,7 @@ using Utils;
 using System.Collections;
 using Softviz.Controllers;
 
+using System.Diagnostics;
 
 namespace Softviz.Graph
 {
@@ -134,9 +135,9 @@ namespace Softviz.Graph
 
         private IEnumerator HandleIt()
         {
-            Debug.Log("Waiting to recreate hierarchy");
+            UnityEngine.Debug.Log("Waiting to recreate hierarchy");
             yield return new WaitForSeconds(3);
-            Debug.Log("Starting recreating");
+            UnityEngine.Debug.Log("Starting recreating");
             RecreateHierarchy();
         }
 

@@ -49,6 +49,8 @@ namespace Communication
         #endregion Misc
 
         #region NodeColumns
+        
+
         public static async void GetNodeColorColumn(int iGraphId = 1)
         {
             Dictionary<string, object> param = new Dictionary<string, object>()
@@ -286,6 +288,18 @@ namespace Communication
                 {"newShape", iShape}
             };
             await NetHandler.Instance.Call("setNodeShape", param);
+        }
+
+        public static async void SetNodeFixed(int nodeID, bool iSet, int iGraphId = 1)
+        {
+            char set = iSet == true ? '1' : '0';
+            Dictionary<string, object> param = new Dictionary<string, object>()
+            {
+                {"graphId", iGraphId},
+                {"nodeId", nodeID},
+                {"set", set}
+            };
+            await NetHandler.Instance.Call("setNodeFixed", param);
         }
 
         public static async void setNodeColor(int iNodeId, Color iColor, int iGraphId = 1)

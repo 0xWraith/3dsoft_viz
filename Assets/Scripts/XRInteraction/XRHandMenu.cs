@@ -1,4 +1,5 @@
 using Microsoft.MixedReality.Toolkit.Input;
+using System;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
 using Softviz.MetaNodes.Magnets;
@@ -7,6 +8,8 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 using Softviz.Graph;
 using Softviz.Controllers;
 using System.Data;
+using Communication;
+using UnityEditor.PackageManager;
 
 namespace XRInteraction
 {
@@ -45,16 +48,16 @@ namespace XRInteraction
         public EdgeMagnet   edgeMagnetPrefab;
         public RadiusMagnet radiusMagnetPrefab;
 
+        // Graph config
+        public float          attractiveForce;
+        public TMPro.TMP_Text attractiveForceText;
+        public float          repulsiveForce;
+        public TMPro.TMP_Text repulsiveForceText;
+        public float          minNodeDist;
+        public TMPro.TMP_Text minNodeDistText;
+
         private void Start()
         {
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Z)) 
-            {
-                AddRadiusMagnet();
-            }   
         }
         
         #region Public Functions
@@ -79,6 +82,31 @@ namespace XRInteraction
         // {
         //     XRMagnetController.GetComponent<XRMagnetController>().AddEdgeMagnet();
         // }
+
+        public void OnAttrativeForceSlider(SliderEventData data)
+        {
+            attractiveForce = data.NewValue * 10f;
+            attractiveForceText.text = String.Format("{0:0.00}", attractiveForce);
+        }
+
+        public void OnRepulsiveForceSlider(SliderEventData data)
+        {
+            repulsiveForce = data.NewValue * 10f;
+            repulsiveForceText.text = String.Format("{0:0.00}", repulsiveForce);
+        }
+
+        public void OnMinNodeDistSlider(SliderEventData data)
+        {
+            minNodeDist = data.NewValue * 10f;
+            minNodeDistText.text = String.Format("{0:0.00}", minNodeDist);
+        }
+
+        public void ChangeGraphConfig()
+        {
+            API_out.SetAttractiveForce(attractiveForce);
+            API_out.SetRepulsiveForce(repulsiveForce);
+            API_out.SetMinNodeDistance(minNodeDist);
+        }
 
         public void OnSliderMinRadiusChanged(SliderEventData eventData)
         {
@@ -129,31 +157,31 @@ namespace XRInteraction
             magnet.RadiusMagnetInit(metaNodesManager);
         }
 
-        public void AddRestriction(int type)
-        {
-            GameObject wrapper = GameObject.FindGameObjectWithTag("CommunicationWrapper");
-            GameObject restriction;
+        // public void AddRestriction(int type)
+        // {
+        //     GameObject wrapper = GameObject.FindGameObjectWithTag("CommunicationWrapper");
+        //     GameObject restriction;
 
-            if (type == 1) {
-                restriction = Instantiate(sphereRestrictionWithMenu, new Vector3(0, 0, 0), Quaternion.identity, wrapper.transform);
-            } else {
-                restriction = Instantiate(quadRestrictionWithMenu, new Vector3(0, 0, 0), Quaternion.identity, wrapper.transform);
-            }
+        //     if (type == 1) {
+        //         restriction = Instantiate(sphereRestrictionWithMenu, new Vector3(0, 0, 0), Quaternion.identity, wrapper.transform);
+        //     } else {
+        //         restriction = Instantiate(quadRestrictionWithMenu, new Vector3(0, 0, 0), Quaternion.identity, wrapper.transform);
+        //     }
             
 
-            restriction.transform.parent = wrapper.transform;
-            restriction.transform.localPosition = Vector3.zero;
-            restriction.transform.position = new Vector3(0, 0, 0);
+        //     restriction.transform.parent = wrapper.transform;
+        //     restriction.transform.localPosition = Vector3.zero;
+        //     restriction.transform.position = new Vector3(0, 0, 0);
 
-            GameObject[] rwm = GameObject.FindGameObjectsWithTag("RestrictionWithMenu");
+        //     GameObject[] rwm = GameObject.FindGameObjectsWithTag("RestrictionWithMenu");
 
-            foreach(var a in rwm)
-            {
-                a.transform.position = new Vector3(0, 0, 0);
-                restriction.transform.localPosition = Vector3.zero;
-            }
+        //     foreach(var a in rwm)
+        //     {
+        //         a.transform.position = new Vector3(0, 0, 0);
+        //         restriction.transform.localPosition = Vector3.zero;
+        //     }
         
-        }
+        // }
 
         public void StopUpdatingNodes() {
             

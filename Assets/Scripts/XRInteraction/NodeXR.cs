@@ -16,22 +16,22 @@ public class NodeXR : Node
     new public void UpdateShape(AvailableShapes shape)
     {
     }
-    public override void UpdatePosition(Vector3 position)
-    {
-        bool update = GameObject.FindGameObjectWithTag("CommunicationWrapper").GetComponent<NodePositionChange>().changePositions;
+    // public override void UpdatePosition(Vector3 position)
+    // {
+    //     bool update = GameObject.FindGameObjectWithTag("CommunicationWrapper").GetComponent<NodePositionChange>().changePositions;
 
-        if (!update) {
-            return;
-        }
+    //     if (!update) {
+    //         return;
+    //     }
         
-        var comp = GetComponent<NodePosition>();
-        if (comp == null)
-        {
-            comp = gameObject.AddComponent(typeof(NodePosition)) as NodePosition;
-        }
+    //     var comp = GetComponent<NodePosition>();
+    //     if (comp == null)
+    //     {
+    //         comp = gameObject.AddComponent(typeof(NodePosition)) as NodePosition;
+    //     }
 
-        comp.SetPosition(position);
-    }
+    //     comp.SetPosition(position);
+    // }
 
     public void SelectedToggle()
     {
@@ -46,7 +46,7 @@ public class NodeXR : Node
             XRGraphController.Instance.selectedNodes.Remove(id);
         }
 
-        halo.range = 0.15f * model.transform.localScale.x;
+        halo.range = 2f * model.transform.lossyScale.x;
         halo.enabled = selected;
     }
 
@@ -63,7 +63,25 @@ public class NodeXR : Node
             XRGraphController.Instance.selectedNodes.Remove(id);
         }
 
-        halo.range = 0.15f * model.transform.localScale.x;
+        halo.range = 2f * model.transform.lossyScale.x;
         halo.enabled = selected;
+    }
+
+    public void OutlineWithoutSelection(Color color) 
+    {
+        halo.range = 2f * model.transform.lossyScale.x;
+        halo.color = color;
+        halo.enabled = true;
+    }
+
+    public void OutlineWithoutSelectionOff()
+    {
+        halo.enabled = false;
+        halo.color = Color.red;
+    }
+
+    public void ResizeHalo() 
+    {
+        halo.range = 2f * model.transform.lossyScale.x;
     }
 }

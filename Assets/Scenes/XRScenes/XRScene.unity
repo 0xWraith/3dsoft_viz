@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17338738, g: 0.21673954, b: 0.29880902, a: 1}
+  m_IndirectSpecularColor: {r: 0.17338693, g: 0.21673913, b: 0.2988081, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3018,6 +3018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d05ea7ae411b1b4e888ca8c73ec082d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedNodes: 
   graph: {fileID: 686661116}
   config:
     actualLayoutAlgorithm: 0
@@ -3055,6 +3056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e63516790ac32e84e85a27ff0ababacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedNodes: 
   graph: {fileID: 686661116}
   config:
     actualLayoutAlgorithm: 0
@@ -3066,6 +3068,7 @@ MonoBehaviour:
     actualAttractiveForceValue: 1
     actualRepulsiveForceValue: 1
     actualMinNodeDistanceValue: 1
+  selector: {fileID: 0}
 --- !u!1 &713076993 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 105336, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
@@ -5670,7 +5673,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259793700}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.29, y: -2.529, z: 20.61}
+  m_LocalPosition: {x: 11.29, y: -5.93, z: 20.61}
   m_LocalScale: {x: 5, y: 5, z: 6}
   m_Children: []
   m_Father: {fileID: 0}

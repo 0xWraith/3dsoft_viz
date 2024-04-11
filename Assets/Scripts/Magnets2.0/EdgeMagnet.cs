@@ -3,6 +3,7 @@ using System.Linq;
 using Communication;
 using Softviz.Controllers;
 using UnityEngine;
+using static MetaNodesManager;
 
 public class EdgeMagnet : MonoBehaviour {
 
@@ -27,7 +28,8 @@ public class EdgeMagnet : MonoBehaviour {
         
         graph = (XRGraphController)GraphController.Instance;
 
-        id = manager.NewMagnet();
+        MetaNodeData data = manager.NewMagnet();
+        id = data.id;
 
         API_out.CreateMetaNode(
             1,

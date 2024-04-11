@@ -1,26 +1,29 @@
 using System;
 using Communication;
-using Leap.Unity.Attributes;
 using Microsoft.MixedReality.Toolkit.UI;
 using Softviz.Controllers;
 using UnityEngine;
+using static MetaNodesManager;
 
 public class RadiusMagnet : MonoBehaviour
 {
-    public int            id; 
-    public Transform      minRadiusSphere;
-    public Transform      maxRadiusSphere;
-    public float          minRadius;
-    public float          maxRadius;
-    public TMPro.TMP_Text minRadiusText;
-    public TMPro.TMP_Text maxRadiusText;
-    public TMPro.TMP_Text magnetIdText;
-    public Renderer[]     visualRenderers = new Renderer[2];
-    public float          strength;
-    public TMPro.TMP_Text strengthText;
-    public Transform      detailsMenu;
+    public int               id; 
+    public Color             color;
+    public Transform         minRadiusSphere;
+    public Transform         maxRadiusSphere;
+    public float             minRadius;
+    public float             maxRadius;
+    public TMPro.TMP_Text    minRadiusText;
+    public TMPro.TMP_Text    maxRadiusText;
+    public TMPro.TMP_Text    magnetIdText;
+    public Renderer[]        visualRenderers = new Renderer[2];
+    public float             strength;
+    public TMPro.TMP_Text    strengthText;
+    public Transform         detailsMenu;
+    private MetaNodesManager manager;
 
-    public void RadiusMagnetInit(MetaNodesManager manager)
+
+    public void RadiusMagnetInit(MetaNodesManager metaNodesManager)
     {
         transform.localScale = new Vector3(
             transform.localScale.x / transform.parent.localScale.x,
@@ -28,9 +31,13 @@ public class RadiusMagnet : MonoBehaviour
             transform.localScale.z / transform.parent.localScale.z
         );
 
+        manager = metaNodesManager;
+
         detailsMenu.parent = manager.transform;
 
-        id = manager.NewMagnet();
+        MetaNodeData data = manager.NewMagnet();
+        id    = data.id;
+        color = data.color;
 
         magnetIdText.text = "Magnet ID: " + id;
 
@@ -78,6 +85,14 @@ public class RadiusMagnet : MonoBehaviour
         strengthText.text = String.Format("{0:0.00}", strength);
     }
 
+    public void UIDestroy()
+    {
+        API_out.DeleteMetaNode(1, id);
+        manager.DeleteMagnet();
+        Destroy(gameObject);
+        Destroy(detailsMenu.gameObject);
+    }
+
     public void UpdateMagnet() 
     {
         API_out.UpdateMetaNode(
@@ -101,7 +116,8 @@ public class RadiusMagnet : MonoBehaviour
     {
         foreach (var renderer in visualRenderers)
         {
-            renderer.material.color = active ? Color.red : Color.white;
+            Color color = active ? Color.red : Color.white;
+            renderer.material.SetColor("_Color", color);
         }
     }
 } 

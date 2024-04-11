@@ -6,6 +6,10 @@ using Microsoft.MixedReality.Toolkit.UI;
 using System.Linq;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Softviz.Graph;
+using Softviz.Graph.VisualMapping;
+using System;
+using Microsoft.MixedReality.Toolkit.Utilities;
+using Communication;
 
 public class XRGraphController : GraphController
 {
@@ -14,6 +18,15 @@ public class XRGraphController : GraphController
     protected bool groundPositionSet = false;
 
     public MultipleNodeSelection selector;
+
+    public Transform typeFilterCollection;
+    public Transform typeFilterEntryPrefab;
+
+    public List<string> typeFilter;
+
+    private bool sortListLoaded = false;
+
+    // public List<string> types;
 
     new public void Start()
     {
@@ -25,8 +38,39 @@ public class XRGraphController : GraphController
     new public void Update() {
         base.Update();
 
-        // As MRTK doesnt provide getter for active state of teleport system,
-        // when we dont enable teleportation, we dont place ground object
+        if (!sortListLoaded)
+        {
+            Dictionary<int, Node> nodes = graph.Nodes;
+
+            if (nodes == null)
+            {
+                return;
+            }
+
+            List<string> types = new List<string>();
+
+            foreach (var node in nodes)
+            {
+                NodeXR xrNode = (NodeXR)node.Value;
+                string type = xrNode.GetComponent<NodeType>().type;
+
+                if (!types.Contains(type))
+                {
+                    types.Add(type);
+                }
+            }
+
+            foreach (var type in types)
+            {
+                var spawn = Instantiate(typeFilterEntryPrefab, typeFilterCollection);
+                spawn.GetComponent<ButtonConfigHelper>().MainLabelText = type;
+            }
+            typeFilterCollection.GetComponent<GridObjectCollection>().UpdateCollection();
+
+            sortListLoaded = true;
+        }
+        // // As MRTK doesnt provide getter for active state of teleport system,
+        // // when we dont enable teleportation, we dont place ground object
         // GameObject ground = GameObject.FindGameObjectWithTag("Ground");
         // if (ground != null)
         // {
@@ -53,6 +97,33 @@ public class XRGraphController : GraphController
         //     }
         // }
 
+
+        // if (Input.GetKeyDown(KeyCode.M))
+        // {
+        //     SortNodesByType();
+        // }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            FreezeSelectedNodes();
+        }
+
+    }
+
+    public void SortNodesByType()
+    {
+        Dictionary<int, Node> nodes = graph.Nodes;
+
+        foreach (var node in nodes)
+        {
+            NodeXR xrNode = (NodeXR)node.Value;
+            string type   = xrNode.GetComponent<NodeType>().type;
+
+            if (typeFilter.Contains(type))
+            {
+                xrNode.SetSelected(true);
+            }
+        }
     }
 
     public void SelectAllNodes()
@@ -90,6 +161,55 @@ public class XRGraphController : GraphController
         selector.ResetSelector();
     }
 
+    public void ResizeSelectedVisuals()
+    {
+        foreach (int id in selectedNodes.ToArray())
+        {
+            NodeXR node = (NodeXR)graph.Nodes[id];
+            node.ResizeHalo();
+        }
+    }
+
+    public void ShowNodeLabels(bool state) 
+    {
+        foreach (var node in graph.Nodes.Values)
+        {
+            node.GetComponent<NodeLabel>().label.SetActive(state);
+        }
+    }
+
+    public void ShowEdgeLabes(bool state)
+    {
+        foreach (var edge in graph.Edges.Values)
+        {
+            edge.GetComponent<EdgeLabel>().label.SetActive(state);
+        }
+    }
+
+    public void FreezeSelectedNodes() 
+    {
+        foreach (var node_id in selectedNodes)
+        {
+            API_out.SetNodeFixed(node_id, true);
+        }
+    }
+
+    public void FreezeNodes(int[] nodes)
+    {
+        foreach (var node_id in nodes)
+        {
+            API_out.SetNodeFixed(node_id, true);
+        }
+    }
+
+    public void UnfreezeNodes(int[] nodes)
+    {
+        foreach (var node_id in nodes)
+        {
+            API_out.SetNodeFixed(node_id, false);
+        }
+    }
+
     public void RunLayoutingFromXR()
     {
         RunLayouting();
@@ -121,8 +241,8 @@ public class XRGraphController : GraphController
         } else {
             // Magnets and restrictions do not know about our local graph properties such as scale and position
             // so if we want the algorithm to reflect correct data, we have to trash local graph changes
-            graph.transform.localScale = new Vector3(0, 0, 0);
-            graph.transform.position = new Vector3(0, 0, 0);
+            // graph.transform.localScale = new Vector3(0, 0, 0);
+            // graph.transform.position = new Vector3(0, 0, 0);
             base.ResumeAlgorithm();
         }
     }

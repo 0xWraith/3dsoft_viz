@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Communication;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace Softviz.Controllers
 {
@@ -207,6 +208,19 @@ namespace Softviz.Controllers
             graph.UpdateNodesFiltered(dictionary);
         }
 
+        public void UpdateNodesIsFixed(string isFixedRaw)
+        {
+            Dictionary<int, bool> dictionary = JsonToColumn<ColumnNodeEdgeIsFiltered>(isFixedRaw).ToDictionary() as Dictionary<int, bool>;
+            Debug.Log("Frozen nodes: ");
+            foreach (var id in dictionary.Keys)
+            {
+                if (dictionary[id])
+                {
+                    Debug.Log(id);
+                }
+            }           
+        }
+
         /// <summary>
         /// Metóda, ktorá podľa Lui updatne farbu všetkým hranám. 
         /// Funguje tak, že Lua pošle údaje vo formáte json, ktoré sa následne deserializujú, uložia sa do zoznamu (dictionary) ako id hrany + Color 
@@ -304,6 +318,10 @@ namespace Softviz.Controllers
             API_out.GetNodeSizeColumn();
             API_out.GetNodeShapeColumn();
             API_out.GetNodeFilteredColumn();
+
+            // API_out.GetNodeMetricsColumn();
+            // API_out.GetNodeInfoflowMetricsColumn();
+            // API_out.GetNodeLabelColumn();
         }
 
         /// <summary>
@@ -319,6 +337,7 @@ namespace Softviz.Controllers
         protected override void Start()
         {
             API_out.LoadGraph(Enums.LayoutAlgorithm.FruchtermanReingold.ToString());
+            // API_out.LoadGraph("FruchtermanReingoldNew");
             API_out.Initialize();
             API_out.UpdateNodes();
 
@@ -331,12 +350,14 @@ namespace Softviz.Controllers
             API_out.GetNodeShapeColumn();
             API_out.GetNodeColorColumn();
             API_out.GetNodeSizeColumn();
+            API_out.GetNodeLabelColumn();
+            API_out.GetNodeTypeColumn();
 
             API_out.GetEdgeDestinationIdColumn();
             API_out.GetEdgeSourceIdColumn();
             API_out.GetEdgeColorColumn();
             API_out.GetEdgeLabelColumn();
-
+            
 
             // RabbitMQ test 
             {
@@ -345,15 +366,15 @@ namespace Softviz.Controllers
 
                 
                 // Thread.Sleep(5000);
-
-                // producer.AddToQueue("ahoj");
+                // var file = File.ReadAllText(@"E:\Hromada\samples\response.json");
+                // producer.AddToQueue(file);
             }
         }
 
         protected override void Update()
         {
             // TODO docasne riesenie
-            if (Time.time >= lastUpdateSeconds + 5f)
+            if (Time.time >= lastUpdateSeconds + 0.25f)
             {
                 lastUpdateSeconds = Time.time;
                 API_out.UpdateNodes();

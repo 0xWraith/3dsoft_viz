@@ -18,15 +18,19 @@ namespace Softviz.Graph
         public void Initialize(int id, Vector3 position)
         {
             this.id = id;
-
             // position = GameObject.FindGameObjectWithTag("CommunicationWrapper").transform.InverseTransformPoint(position);
 
             UpdatePosition(position);
         }
 
+        private void Update() {
+            var label = GetComponent<NodeLabel>().label;
+            label.transform.rotation = Quaternion.LookRotation(label.transform.position - Camera.main.transform.position);
+        }
+
         public virtual void UpdatePosition(Vector3 position)
         {
-            Debug.Log("A");
+            // Debug.Log("A");
             var comp = GetComponent<NodePosition>();
             if (comp == null)
             {
@@ -101,13 +105,19 @@ namespace Softviz.Graph
             if (comp == null)
             {
                 comp = gameObject.AddComponent(typeof(NodeLabel)) as NodeLabel;
+                comp.SetLabel(label);
+                comp.label.SetActive(false);
             }
-            comp.SetLabel(label);
         }
 
         public void UpdateType(string type)
         {
-            //TODO
+            var comp = GetComponent<NodeType>();
+            if (comp == null)
+            {
+                comp = gameObject.AddComponent(typeof(NodeType)) as NodeType;
+            }
+            comp.SetNodeType(type);
         }
 
         public void UpdateBody(string body)
