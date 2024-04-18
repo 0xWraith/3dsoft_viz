@@ -561,7 +561,7 @@ MonoBehaviour:
   useRelativeTransform: 0
   spatialMappingMaterial: {fileID: 2100000, guid: 2466f20e73a356e4b8be3fd5cf44512e,
     type: 2}
-  StartSpatialMappingTest: 0
+  StartSpatialMappingTest: 1
   StopSpatialMappingTest: 0
   tex: {fileID: 0}
   myImage: {fileID: 1055567631}
@@ -638,6 +638,7 @@ MonoBehaviour:
   LeapMotionCamera: {fileID: 8316358255361797333}
   myAttachedTracker: {fileID: 0}
   myAttachedTrackerX: {fileID: 0}
+  myAttachedTrackerZed: {fileID: 0}
   RigCenter: {fileID: 0}
   RenderedGraphicsBrightness: 1
   TargetRendererRate: 120

@@ -1029,7 +1029,7 @@ MonoBehaviour:
   RigCenter: {fileID: 4006825230845938166}
   EyeLeft: {fileID: 5044071878115133369}
   EyeRight: {fileID: 7737405846421882022}
-  CameraPreview: {fileID: 0}
+  CameraPreview: {fileID: 606300671412568836}
   currentEuler: {x: 0, y: 0, z: 0}
   MeshParent: {fileID: 0}
   hasInitializedTexture: 0
@@ -1051,7 +1051,9 @@ MonoBehaviour:
   useRelativeTransform: 0
   spatialMappingMaterial: {fileID: 2100000, guid: 2466f20e73a356e4b8be3fd5cf44512e,
     type: 2}
-  StartSpatialMappingTest: 0
+  spatialMappingRange: 3.5
+  spatialMappingResolution: 0.08
+  StartSpatialMappingTest: 1
   StopSpatialMappingTest: 0
   tex: {fileID: 0}
   myImage: {fileID: 9182760973121505179}
@@ -1246,4 +1248,4 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8471157175708360469}
-  m_Enabled: 1
+  m_Enabled: 0
