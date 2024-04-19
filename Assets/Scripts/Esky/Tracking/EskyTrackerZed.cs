@@ -114,6 +114,8 @@ namespace BEERLabs.ProjectEsky.Tracking{
             ((EskyTrackerZed)instances[TrackerID]).AddPoseFromCallback(epcd);
             UnityEngine.Debug.Log("Received a pose from the relocalization");
         }
+
+        #region SpatialMappingCallbacks
         [MonoPInvokeCallback(typeof(MeshChunksReceivedCallback))]
         static void OnMeshReceivedCallback(int ChunkID, IntPtr vertices, int verticesLength, IntPtr normals, int normalsLength, IntPtr uvs, int uvsLength, IntPtr triangleIndices, int triangleIndicesLength) {            
             if (zedInstance == null) {
@@ -122,10 +124,13 @@ namespace BEERLabs.ProjectEsky.Tracking{
             float[] chunkVertices = new float[verticesLength];
             float[] chunkNormals = new float[normalsLength];
             int[] chunkIndices = new int[triangleIndicesLength];
+            float[] uvsData = new float[uvsLength];
 
             Marshal.Copy(vertices, chunkVertices, 0, verticesLength);
             Marshal.Copy(normals, chunkNormals, 0, normalsLength);
-            Marshal.Copy(triangleIndices, chunkIndices,0,triangleIndicesLength);            
+            Marshal.Copy(triangleIndices, chunkIndices, 0, triangleIndicesLength);            
+            Marshal.Copy(uvs, uvsData, 0, uvsLength);
+
 
             List<Vector3> transformedChunkNormals = new List<Vector3>();
             List<Vector3> transformedChunkVertices = new List<Vector3>();
@@ -133,17 +138,17 @@ namespace BEERLabs.ProjectEsky.Tracking{
             for(int i = 0; i < verticesLength; i += 3) {
                 transformedChunkVertices.Add(new Vector3(chunkVertices[i], chunkVertices[i + 1], chunkVertices[i + 2]));
             } 
-            for(int i = 0; i < normalsLength; i += 3){
+            for(int i = 0; i < normalsLength; i += 3) {
                 transformedChunkNormals.Add(new Vector3(chunkNormals[i], chunkNormals[i + 1], chunkNormals[i + 2]));
             }
-            for(int i = 0; i < uvsLength; i += 2){
+            for(int i = 0; i < uvsLength; i += 2) {
                 transformedChunkNormals.Add(new Vector3(0, 0));
             }    
             Chunk chunk;
-            if(!zedInstance.myMeshChunks.ContainsKey(ChunkID)){
+            if(!zedInstance.myMeshChunks.ContainsKey(ChunkID)) {
                 chunk = new Chunk();
                 zedInstance.myMeshChunks.Add(ChunkID, chunk);
-            }else{
+            } else {
                 chunk = zedInstance.myMeshChunks[ChunkID];
             }
             chunk.isDirty = true;
@@ -155,6 +160,7 @@ namespace BEERLabs.ProjectEsky.Tracking{
                 zedInstance.processMeshList = true;               
             }
         }
+        #endregion
         [MonoPInvokeCallback(typeof(RenderTextureInitialized))]
         static void OnTextureInitialized(int textureWidth, int textureHeight, int textureChannels,float v_fov){
             if(zedInstance != null){
@@ -233,9 +239,9 @@ namespace BEERLabs.ProjectEsky.Tracking{
                 CompletedMeshUpdate();
             }
         }
-        public void DoStartSpatialMapping(){
+        public void DoStartSpatialMapping() {
             StartSpatialMapping(500);
-            if(MeshParent == null){
+            if(MeshParent == null) {
                 MeshParent = new GameObject("MeshParent");                
             }
         }
@@ -259,22 +265,31 @@ namespace BEERLabs.ProjectEsky.Tracking{
                 chunkPairs.Value.isDirty = false;
                 Chunk modifiedJunk = chunkPairs.Value;                        
 
+                Vector2[] uvs = new Vector2[modifiedJunk.vertices.Length];
+                for (int i = 0; i < modifiedJunk.vertices.Length; i++) {
+                    uvs[i] = new Vector2(0, 0);
+                }
+
                 if (chunkPairs.Value.o == null) {
                     modifiedJunk.mesh = new Mesh();
                     modifiedJunk.mesh.MarkDynamic();
                     modifiedJunk.mesh.vertices = modifiedJunk.vertices;
                     modifiedJunk.mesh.normals = modifiedJunk.normals;
+                    modifiedJunk.mesh.uv = uvs;
                     modifiedJunk.mesh.SetIndices(chunkPairs.Value.indices, MeshTopology.Triangles, 0);
                     modifiedJunk.mesh.UploadMeshData(false);
                     
                     GameObject g = 
-                    modifiedJunk.o = new GameObject("Chunk #" + chunkPairs);
+                    modifiedJunk.o = new GameObject("SpatialMappingChunk #" + chunkPairs);
 
                     g.AddComponent<MeshRenderer>();
                     g.GetComponent<MeshRenderer>().material = spatialMappingMaterial;
                     g.AddComponent<MeshFilter>();
                     g.GetComponent<MeshFilter>().mesh = chunkPairs.Value.mesh;
                     g.GetComponent<MeshFilter>().sharedMesh = chunkPairs.Value.mesh;
+
+                    MeshCollider meshCollider = g.AddComponent<MeshCollider>();
+                    meshCollider.sharedMesh = modifiedJunk.mesh;
 
                     g.transform.parent = MeshParent.transform;
                 }
@@ -283,6 +298,12 @@ namespace BEERLabs.ProjectEsky.Tracking{
                     modifiedJunk.mesh.vertices = modifiedJunk.vertices;
                     modifiedJunk.mesh.normals = modifiedJunk.normals;
                     modifiedJunk.mesh.triangles = chunkPairs.Value.indices; 
+                    modifiedJunk.mesh.uv = uvs;
+
+                    //Update meshcollider
+                    MeshCollider meshCollider = chunkPairs.Value.o.GetComponent<MeshCollider>();
+                    meshCollider.sharedMesh = null;
+                    meshCollider.sharedMesh = modifiedJunk.mesh;
                 }
                 chunksToUpdateInMain.Add(chunkPairs.Key,modifiedJunk);
             }
