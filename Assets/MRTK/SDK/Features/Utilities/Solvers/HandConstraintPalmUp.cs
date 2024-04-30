@@ -148,12 +148,12 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Solvers
                 return false;
             }
             
-            if (!controller.IsPositionAvailable)
-            {
+            // if (!controller.IsPositionAvailable)
+            // {
                 // A fully populated hand controller will have position 
                 // information available.
-                return false;
-            }
+                // return false;
+            // }
 
             bool palmFacingThresholdMet = false;
 

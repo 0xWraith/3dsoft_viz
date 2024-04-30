@@ -401,7 +401,7 @@ MonoBehaviour:
   _deviceTiltXAxis: 5
   _deviceOrigin: {fileID: 2225884142245623700}
   _preCullCamera: {fileID: 0}
-  _temporalWarpingMode: 0
+  _temporalWarpingMode: 3
   _customWarpAdjustment: 17
   _updateHandInPrecull: 0
 --- !u!114 &5324585232034467643
@@ -1053,7 +1053,7 @@ MonoBehaviour:
     type: 2}
   spatialMappingRange: 3.5
   spatialMappingResolution: 0.08
-  StartSpatialMappingTest: 1
+  StartSpatialMappingTest: 0
   StopSpatialMappingTest: 0
   tex: {fileID: 0}
   myImage: {fileID: 9182760973121505179}
