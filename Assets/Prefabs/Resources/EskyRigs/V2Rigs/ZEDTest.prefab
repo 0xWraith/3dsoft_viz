@@ -1054,10 +1054,10 @@ MonoBehaviour:
   spatialMappingRange: 3.5
   spatialMappingResolution: 0.08
   StartSpatialMappingTest: 0
-  StopSpatialMappingTest: 0
+  StopSpatialMappingTest: 1
   tex: {fileID: 0}
-  myImage: {fileID: 9182760973121505179}
-  previewCamera: {fileID: 1973362587441372959}
+  myImage: {fileID: 0}
+  previewCamera: {fileID: 0}
 --- !u!1 &6973884163646351926
 GameObject:
   m_ObjectHideFlags: 0

@@ -116,6 +116,11 @@ namespace BEERLabs.ProjectEsky.Tracking{
         }
 
         #region SpatialMappingCallbacks
+
+        public void SpationalMappingStateChangeCallback(bool state){
+            Debug.Log("Spatial Mapping state changed to: " + state);
+        }
+
         [MonoPInvokeCallback(typeof(MeshChunksReceivedCallback))]
         static void OnMeshReceivedCallback(int ChunkID, IntPtr vertices, int verticesLength, IntPtr normals, int normalsLength, IntPtr uvs, int uvsLength, IntPtr triangleIndices, int triangleIndicesLength) {            
             if (zedInstance == null) {
