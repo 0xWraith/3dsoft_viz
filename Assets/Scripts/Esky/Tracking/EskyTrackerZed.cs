@@ -205,6 +205,8 @@ namespace BEERLabs.ProjectEsky.Tracking{
         public float spatialMappingRange = 3.5f; //3.5m
         public float spatialMappingResolution = 0.08f; //8cm
 
+        public bool VIZUALIZE_SPATIAL_MAPPING = false;
+
         public bool StartSpatialMappingTest = false;
         public bool StopSpatialMappingTest = false;
         #endregion
@@ -212,6 +214,16 @@ namespace BEERLabs.ProjectEsky.Tracking{
         bool canRenderImages = false;
         public UnityEngine.UI.RawImage myImage;
         public Camera previewCamera;
+
+        public void UpdateVizualizationState(bool state){
+            VIZUALIZE_SPATIAL_MAPPING = state;
+            if (state) {
+                spatialMappingMaterial.SetColor("_WireColor", new UnityEngine.Color(0.8867924f, 0.8867924f, 0f));
+            } else {
+                spatialMappingMaterial.SetColor("_WireColor", new UnityEngine.Color(0.0f, 0.0f, 0.0f, 0.0f));
+            }
+        }
+
         public override void AfterUpdate() {
             if(hasInitializedTexture){
                 HookDeviceToZed();
@@ -230,11 +242,15 @@ namespace BEERLabs.ProjectEsky.Tracking{
                     StartCoroutine(WaitEndFrameCameraUpdate());
                 }
             }
+
+
             if(StartSpatialMappingTest){
+                Debug.Log("Starting Spatial Mapping");
                 StartSpatialMappingTest = false;
                 DoStartSpatialMapping();
             }
             if(StopSpatialMappingTest){
+                Debug.Log("Stopping Spatial Mapping");
                 StopSpatialMappingTest = false;
                 DoStopSpatialMapping();
             }
@@ -286,6 +302,8 @@ namespace BEERLabs.ProjectEsky.Tracking{
                     
                     GameObject g = 
                     modifiedJunk.o = new GameObject("SpatialMappingChunk #" + chunkPairs);
+
+
 
                     g.AddComponent<MeshRenderer>();
                     g.GetComponent<MeshRenderer>().material = spatialMappingMaterial;

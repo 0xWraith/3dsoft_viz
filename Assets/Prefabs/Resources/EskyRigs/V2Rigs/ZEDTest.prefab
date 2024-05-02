@@ -1053,8 +1053,9 @@ MonoBehaviour:
     type: 2}
   spatialMappingRange: 3.5
   spatialMappingResolution: 0.08
-  StartSpatialMappingTest: 0
-  StopSpatialMappingTest: 1
+  VIZUALIZE_SPATIAL_MAPPING: 0
+  StartSpatialMappingTest: 1
+  StopSpatialMappingTest: 0
   tex: {fileID: 0}
   myImage: {fileID: 0}
   previewCamera: {fileID: 0}

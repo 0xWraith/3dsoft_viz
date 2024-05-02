@@ -20,6 +20,7 @@ public class SpationalMapCollisionDetection : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit)) {
             if (hit.collider.gameObject.name.Contains("SpatialMappingChunk")) {
+                Debug.Log("Hit Spatial Map");
             }
         }     
     }
