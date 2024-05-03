@@ -175,8 +175,6 @@ namespace BEERLabs.ProjectEsky.Configurations{
     {
         public Leap.Unity.AR.WindowOffsetManager v1WindowManager;
         public Leap.Unity.AR.OpticalCalibrationManager v1Renderer;
-        public BEERLabs.ProjectEsky.Tracking.EskyTrackerIntel intelRealsenseTracker;
-        public BEERLabs.ProjectEsky.Tracking.EskyTrackerX eskyTrackerX;
         public BEERLabs.ProjectEsky.Rendering.EskyNativeDxRenderer nativeDirectXrenderer;
         public BEERLabs.ProjectEsky.Extras.Modules.EskyRGBSensorModule RGBSensorModule;
 
@@ -236,15 +234,6 @@ namespace BEERLabs.ProjectEsky.Configurations{
                 if(SensorPreview != null){
                     SensorPreview.gameObject.SetActive(true);
                 }
-                if(intelRealsenseTracker != null){
-                    intelRealsenseTracker.UseExternalCameraPreview = true;
-
-                }
-                if(eskyTrackerX != null)
-                {
-                    eskyTrackerX.UseExternalCameraPreview = true;
-                }
-
             }
 
             if(LoadedSettings.usesExternalRGBCamera){

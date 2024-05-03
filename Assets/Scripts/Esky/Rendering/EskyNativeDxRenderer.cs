@@ -162,9 +162,6 @@ namespace BEERLabs.ProjectEsky.Rendering{
         readonly List<int> windowsOn = new List<int>();
         public DisplayCalibration calibration;
         public GameObject LeapMotionCamera;
-        public BEERLabs.ProjectEsky.Tracking.EskyTrackerIntel myAttachedTracker;
-        public BEERLabs.ProjectEsky.Tracking.EskyTrackerX myAttachedTrackerX;
-        public BEERLabs.ProjectEsky.Tracking.EskyTrackerZed myAttachedTrackerZed;
         public GameObject RigCenter;
         [Range(0,1)]
         public float RenderedGraphicsBrightness = 1.0f;
@@ -295,16 +292,8 @@ namespace BEERLabs.ProjectEsky.Rendering{
                 if(CurrentBrightness != RenderedGraphicsBrightness){
                     CurrentBrightness = RenderedGraphicsBrightness;
                     SetBrightness(0,CurrentBrightness);
-                }
-                if(myAttachedTracker != null){ 
-                    myAttachedTracker.RenderResetFlag();
-                }                
-                if(myAttachedTrackerX != null){
-//                    Debug.Log("Setting Reset Flag");
-                    myAttachedTrackerX.RenderResetFlag();
-                }
+                }        
                 GL.IssuePluginEvent(GetRenderEventFunc(), 0);
-
             }		
         }
 
