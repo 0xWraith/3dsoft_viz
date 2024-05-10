@@ -666,8 +666,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   v1WindowManager: {fileID: 0}
   v1Renderer: {fileID: 0}
-  intelRealsenseTracker: {fileID: 0}
-  eskyTrackerX: {fileID: 0}
   nativeDirectXrenderer: {fileID: 2890445241416919790}
   RGBSensorModule: {fileID: 0}
   LeapMotionController: {fileID: 2225884142245623700}
@@ -910,9 +908,6 @@ MonoBehaviour:
     localPositionLeapMotion: []
     localRotationLeapMotion: []
   LeapMotionCamera: {fileID: 4134478102618409205}
-  myAttachedTracker: {fileID: 0}
-  myAttachedTrackerX: {fileID: 0}
-  myAttachedTrackerZed: {fileID: 0}
   RigCenter: {fileID: 0}
   RenderedGraphicsBrightness: 1
   TargetRendererRate: 120
@@ -1053,7 +1048,7 @@ MonoBehaviour:
     type: 2}
   spatialMappingRange: 3.5
   spatialMappingResolution: 0.08
-  VIZUALIZE_SPATIAL_MAPPING: 0
+  VIZUALIZE_SPATIAL_MAPPING: 1
   StartSpatialMappingTest: 1
   StopSpatialMappingTest: 0
   tex: {fileID: 0}

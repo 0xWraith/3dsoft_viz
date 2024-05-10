@@ -764,6 +764,18 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
         {
             if (active)
             {
+                UnityEngine.RaycastHit hit;
+                if (UnityPhysics.Raycast(transform.position, transform.forward, out hit)) {
+                    if (hit.collider.gameObject.name.Contains("SpatialMappingChunk")) {
+                        Debug.Log("Hit Spatial Map");
+                        //When the object hits the spatial map, move it back to the previous position
+                        // transform.position = previousPosition;
+                        // return;
+                    } else {
+                        Debug.Log("Hit something else: " + hit.collider.gameObject.name);
+                    }
+                }
+
                 if (currentPointer != null)
                 {
                     TransformTarget(currentHandleType);

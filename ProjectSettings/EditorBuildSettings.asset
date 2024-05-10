@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AR/ARNew.unity
     guid: 231a6f9a8845e9846a4e8d5acdc131fb
   - enabled: 0
@@ -56,6 +56,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MRTK/Examples/Demos/HandTracking/Scenes/NearMenuExamples.unity
     guid: bf3eb3415bffceb41810526380c2c71c
+  - enabled: 1
+    path: Assets/Scenes/AR/AR_Spational.unity
+    guid: ebe72ccc9b5fa7140b786b9b89c39641
+  - enabled: 0
+    path: Assets/AR_Spational.unity
+    guid: be4592ed690fb6f47bc910b1183a9ccc
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 1ad257b4cc44a2b43921db308f6efb2b,
       type: 2}
