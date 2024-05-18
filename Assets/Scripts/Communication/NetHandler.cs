@@ -22,7 +22,7 @@ namespace Communication
         {
             AsyncIO.ForceDotNet.Force();
             semaphore = new SemaphoreSlim(1, 1);
-            dealer = new DealerSocket("tcp://localhost:49155");
+            dealer = new DealerSocket("tcp://147.175.162.232:49155");
             dealer.Options.Identity = Encoding.Unicode.GetBytes("ClientId");
             dealer.ReceiveReady += ReceiveReady;
             poller = new NetMQPoller();
