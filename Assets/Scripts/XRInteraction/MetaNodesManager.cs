@@ -9,6 +9,10 @@ public class MetaNodesManager : MonoBehaviour
     public int restrictionsCounter;
     public Color[] colors; 
 
+    public List<int> restrictionNodesIds;
+
+    // note(hrumy): Just for adjusting the inner restriction light after scaling graph.
+    public List<RestrictionObject> restrictions;
 
     public struct MetaNodeData
     {
@@ -53,9 +57,24 @@ public class MetaNodesManager : MonoBehaviour
         magnetsCounter -= 1;
     }
 
-    public void DeleteRestriction()
+    public void DeleteRestriction(List<int> nodes, RestrictionObject rest)
     {
+        foreach (int node in nodes)
+        {
+            restrictionNodesIds.Remove(node);
+        }
+
+        restrictions.Remove(rest);
+
         restrictionsCounter -= 1;
+    }
+
+    public void AddRestrictionNodes(List<int> nodes)
+    {
+        foreach (int node in nodes)
+        {
+            restrictionNodesIds.Add(node);
+        }
     }
 
     public void IncrementCounter()

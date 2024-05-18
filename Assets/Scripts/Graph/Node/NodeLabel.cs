@@ -34,6 +34,7 @@ namespace Softviz.Graph
                 label = Instantiate(Resources.Load<GameObject>("Prefabs/MRTKScene/VRTextPrefab"), this.transform.position + new Vector3(0, 0f, -0.1f), Quaternion.identity, node.transform);
                 label.transform.localScale = new Vector3(0.07f, 0.07f, 0.07f);
                 label.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);// Quaternion.Euler(0f, node.transform.rotation.eulerAngles.y, node.transform.rotation.eulerAngles.z);
+                label.transform.position += label.transform.rotation * new Vector3(0.1f, 0.1f, 0.1f);
                 // Nastavíme text vytvorenému objektu. Text bude mať maximálne 30 znakov.
                 int maxLetters = (30 < iLabel.Length) ? 30 : iLabel.Length;
                 label.GetComponent<TextMesh>().text = iLabel.Substring(0, maxLetters);

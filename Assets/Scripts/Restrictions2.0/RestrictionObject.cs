@@ -9,6 +9,7 @@ using Softviz.Graph;
 using Softviz.MetaNodes;
 using Softviz.MetaNodes.Magnets;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.XR;
@@ -47,6 +48,11 @@ public class RestrictionObject : MonoBehaviour
     private int counter = 0;
     private bool confirmedPosition;
 
+    public InteractionTimer logger;
+
+    public Light     halo;
+    public Transform shape;
+
     void Update()
     {
         // if (confirmedPosition)
@@ -63,11 +69,17 @@ public class RestrictionObject : MonoBehaviour
         {
             transform.localRotation = Quaternion.identity;
         }
+
+        if (nearMenu.gameObject.activeSelf) 
+        {
+            nearMenu.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+            nearMenu.position = transform.position + 0.15f * transform.localScale.x * -nearMenu.transform.forward;
+        }
     }
 
-    public void RestrictionInit(int restrictionType, MetaNodesManager metaNodesManager) 
+    public void RestrictionInit(int restrictionType, MetaNodesManager metaNodesManager, InteractionTimer logs) 
     {
-        Transform shape = Instantiate(shapes[restrictionType], transform.position, transform.rotation, transform);
+        shape = Instantiate(shapes[restrictionType], transform.position, transform.rotation, transform);
 
         manager = metaNodesManager;
         MetaNodeData data = manager.NewRestriction();
@@ -77,9 +89,9 @@ public class RestrictionObject : MonoBehaviour
         type = restrictionType;
         mode = 1;
 
-        shape.GetComponent<Light>().color = color;
-
         restrictionIdText.text = "Restriction ID: " + id;
+
+        logger = logs;
 
         transform.localScale = new Vector3(
             transform.localScale.x / transform.parent.localScale.x,
@@ -87,13 +99,17 @@ public class RestrictionObject : MonoBehaviour
             transform.localScale.z / transform.parent.localScale.z
         );
 
+        halo = shape.GetComponent<Light>();
+        halo.color = color;
+        halo.range = transform.lossyScale.x;
+
         // note(hrumy): Avoiding overlaping.
         detailsMenu.localPosition += new Vector3(0, 0.5f * id, 0); 
         // detailsMenu.LookAt(Camera.main.transform);
         detailsMenu.rotation = Quaternion.LookRotation(detailsMenu.position - Camera.main.transform.position);
 
         // note(hrumy): Making the parent of near menus a static object to disable moving with parent.
-        nearMenu.parent = detailsMenu.parent = metaNodesManager.transform;
+        detailsMenu.parent = metaNodesManager.transform;
     }
 
     #region UI_CALLBACKS
@@ -104,7 +120,6 @@ public class RestrictionObject : MonoBehaviour
         foreach (var node in selectedNodes)
         {
             var xrnode = (NodeXR)graph.graph.Nodes[node];
-            // xrnode.gameObject.AddComponent<ParentConstraint>();
 
             ConstraintSource source = new ConstraintSource
             {
@@ -112,33 +127,16 @@ public class RestrictionObject : MonoBehaviour
                 weight = 1
             };
 
-            xrnode.gameObject.GetComponent<ParentConstraint>().AddSource(source);
-            xrnode.gameObject.GetComponent<ParentConstraint>().SetTranslationOffset(0, xrnode.transform.position - transform.position);
+            var constraint = xrnode.gameObject.GetComponent<ParentConstraint>();
+            
+            constraint.AddSource(source);
+            constraint.SetTranslationOffset(0, xrnode.transform.position - transform.position);
 
-            xrnode.gameObject.GetComponent<ParentConstraint>().constraintActive = true;
-            xrnode.gameObject.GetComponent<ParentConstraint>().locked = true;
+            constraint.constraintActive = true;
+            constraint.locked = true;
         }
 
         graph.FreezeNodes(selectedNodes.ToArray());
-
-        API_out.GetNodeIsFixedColumn();
-        // var graph = (XRGraphController)GraphController.Instance;
-        // // graph.TogglePauseStage(true);
-        // adjusting = true;
-
-        // ///////////////////////
-
-        // pos = new Vector3[selectedNodes.Count];
-
-        // int i = 0;
-        // foreach (var node in selectedNodes)
-        // {
-        //     var xrnode = (NodeXR)graph.graph.Nodes[node];
-
-        //     pos[i] = transform.InverseTransformPoint(xrnode.transform.position);
-
-        //     i += 1;
-        // }
     }
 
     public void UIDone()
@@ -146,38 +144,21 @@ public class RestrictionObject : MonoBehaviour
         var graph = (XRGraphController)GraphController.Instance;
 
         graph.UnfreezeNodes(selectedNodes.ToArray());
-        API_out.GetNodeIsFixedColumn();
-        
         
         foreach (var node in selectedNodes)
         {
             var xrnode = (NodeXR)graph.graph.Nodes[node];
-            xrnode.gameObject.GetComponent<ParentConstraint>().RemoveSource(0);
-            xrnode.gameObject.GetComponent<ParentConstraint>().constraintActive = false;
-            xrnode.gameObject.GetComponent<ParentConstraint>().locked = false;
+
+            var constraint = xrnode.gameObject.GetComponent<ParentConstraint>();
+            if (constraint.sourceCount != 0) {
+                constraint.RemoveSource(0);
+            }
+            constraint.constraintActive = false;
+            constraint.locked = false;
 
             // note(hrumy): This will work, once the function is set in layouter. 
             // API_out.SetNodePosition(node, xrnode.transform.localPosition);
         }
-
-
-        // var graph = (XRGraphController)GraphController.Instance;
-        // // graph.TogglePauseStage(false);
-        // adjusting = false;
-
-        // foreach (var nodeID in selectedNodes)
-        // {
-        //     var xrnode = (NodeXR)graph.graph.Nodes[nodeID];
-        //     API_out.SetNodePosition(nodeID, xrnode.transform.position);
-        // }
-
-        // // var graph = (XRGraphController)GraphController.Instance;
-
-        // // foreach (var node in selectedNodes)
-        // // {
-        // //     var xrnode = (NodeXR)graph.graph.Nodes[node];
-        // //     xrnode.transform.parent = transform.parent;
-        // // }
     }
 
     // note(hrumy): This doesnt work on server. 
@@ -200,7 +181,8 @@ public class RestrictionObject : MonoBehaviour
             var xrnode = (NodeXR)graph.graph.Nodes[node];
             xrnode.OutlineWithoutSelection(color);
         }
-        
+
+        manager.AddRestrictionNodes(selectedNodes);
         RestrictionCreateAPI();
         confirmedPosition = true;
     }
@@ -220,7 +202,7 @@ public class RestrictionObject : MonoBehaviour
     public void UIRestrictionDestroy()
     {
         RestrictionRemoveAPI();
-        manager.DeleteRestriction();
+        manager.DeleteRestriction(selectedNodes, this);
         Destroy(gameObject);
         Destroy(nearMenu.gameObject);
         Destroy(detailsMenu.gameObject);
@@ -233,6 +215,16 @@ public class RestrictionObject : MonoBehaviour
         }
     }
 
+    public void UIManipulationStart()
+    {
+        logger.StartRestricitonTimer(id);
+    }
+
+    public void UIManipulationEnd()
+    {
+        logger.EndRestrictionTimer(id);
+        halo.range = transform.lossyScale.x;
+    }
     #endregion
 
     #region API_CALLS
@@ -349,4 +341,6 @@ public class RestrictionObject : MonoBehaviour
 
 #endregion
 
+
+    
 }

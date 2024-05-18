@@ -24,6 +24,8 @@ public class XRGraphController : GraphController
 
     public List<string> typeFilter;
 
+    public MetaNodesManager metaNodes;
+
     private bool sortListLoaded = false;
 
     // public List<string> types;
@@ -103,10 +105,10 @@ public class XRGraphController : GraphController
         //     SortNodesByType();
         // }
 
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            FreezeSelectedNodes();
-        }
+        // if (Input.GetKeyDown(KeyCode.F))
+        // {
+        //     FreezeSelectedNodes();
+        // }
 
     }
 
@@ -117,7 +119,7 @@ public class XRGraphController : GraphController
         foreach (var node in nodes)
         {
             NodeXR xrNode = (NodeXR)node.Value;
-            string type   = xrNode.GetComponent<NodeType>().type;
+            string type   = xrNode.nodeType.type;
 
             if (typeFilter.Contains(type))
             {
@@ -167,6 +169,20 @@ public class XRGraphController : GraphController
         {
             NodeXR node = (NodeXR)graph.Nodes[id];
             node.ResizeHalo();
+        }
+
+        if (metaNodes.restrictionsCounter > 0)
+        {
+            foreach (int id in metaNodes.restrictionNodesIds)
+            {
+                NodeXR node = (NodeXR)graph.Nodes[id];
+                node.ResizeHalo();
+            }
+
+            foreach (var rest in metaNodes.restrictions)
+            {
+                rest.halo.range = rest.transform.lossyScale.x; 
+            }
         }
     }
 

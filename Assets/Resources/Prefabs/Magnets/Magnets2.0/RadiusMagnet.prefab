@@ -7434,13 +7434,13 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5527308442879102188}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 3249340970763524426}
+        m_TargetAssemblyTypeName: RadiusMagnet, Assembly-CSharp
+        m_MethodName: UIDestroy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -13734,6 +13734,7 @@ MonoBehaviour:
   strength: 0
   strengthText: {fileID: 1597997696961370472}
   detailsMenu: {fileID: 6180377225458265154}
+  logger: {fileID: 0}
 --- !u!65 &8664869811726447023
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13794,10 +13795,34 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3249340970763524426}
+        m_TargetAssemblyTypeName: RadiusMagnet, Assembly-CSharp
+        m_MethodName: UIManipulationStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3249340970763524426}
+        m_TargetAssemblyTypeName: RadiusMagnet, Assembly-CSharp
+        m_MethodName: UIManipulationEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onHoverEntered:
     m_PersistentCalls:
       m_Calls: []

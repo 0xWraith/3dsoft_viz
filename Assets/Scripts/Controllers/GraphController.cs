@@ -379,8 +379,9 @@ namespace Softviz.Controllers
                 lastUpdateSeconds = Time.time;
                 API_out.UpdateNodes();
 
-                UpdateNodes();
-                UpdateEdges();
+                // UpdateNodes();
+                // UpdateEdges();
+                API_out.GetNodePositionColumn();
             }
 
             if (Input.GetKeyDown("backspace"))

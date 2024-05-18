@@ -9,7 +9,8 @@ using Softviz.Graph;
 using Softviz.Controllers;
 using System.Data;
 using Communication;
-// using UnityEditor.PackageManager;
+using UnityEditor.PackageManager;
+using System.Collections.Generic;
 
 namespace XRInteraction
 {
@@ -38,6 +39,8 @@ namespace XRInteraction
             set => targetObjectSprite = value;
         }
 
+        public Transform graph;
+
         // Restrictions 2.0
         public RestrictionObject restrictionPrefab;
         public Transform         restrictionParent;
@@ -55,6 +58,8 @@ namespace XRInteraction
         public TMPro.TMP_Text repulsiveForceText;
         public float          minNodeDist;
         public TMPro.TMP_Text minNodeDistText;
+
+        public InteractionTimer logs;
 
         private void Start()
         {
@@ -142,19 +147,50 @@ namespace XRInteraction
         public void AddRestrictionObject(int type) 
         {
             RestrictionObject restriction = Instantiate(restrictionPrefab, restrictionSpawnPoint.position, Quaternion.identity, restrictionParent);
-            restriction.RestrictionInit(type, metaNodesManager);
+            restriction.RestrictionInit(type, metaNodesManager, logs);
+            metaNodesManager.restrictions.Add(restriction);
         }
 
         public void AddEdgeMagnet()
         {
             EdgeMagnet magnet = Instantiate(edgeMagnetPrefab, restrictionSpawnPoint.position, Quaternion.identity, restrictionParent);
-            magnet.EdgeMagnetInit(metaNodesManager);
+            magnet.EdgeMagnetInit(metaNodesManager, logs);
         }
 
         public void AddRadiusMagnet()
         {
             RadiusMagnet magnet = Instantiate(radiusMagnetPrefab, restrictionSpawnPoint.position, Quaternion.identity, restrictionParent);
-            magnet.RadiusMagnetInit(metaNodesManager);
+            magnet.RadiusMagnetInit(metaNodesManager, logs);
+        }
+
+        public void ResetGraph()
+        {
+            graph.localPosition = Vector3.zero;
+            graph.localScale    = new Vector3(0.1f, 0.1f, 0.1f);
+        }
+
+        public void DisableNodeColliders(bool disabled)
+        {
+            var graph = (XRGraphController)GraphController.Instance;
+            
+            Dictionary<int, Node> nodes = graph.graph.Nodes;
+
+            foreach (var node in nodes)
+            {
+                NodeXR xrNode = (NodeXR)node.Value;
+                xrNode.model.GetComponent<BoxCollider>().enabled = !disabled;
+
+                if (disabled) 
+                {
+                    var material = xrNode.model.GetComponent<Renderer>().material;
+                    material.SetColor("_Color", Color.cyan);
+                }
+            }
+
+            if (!disabled)
+            {
+                API_out.GetNodeColorColumn();
+            }
         }
 
         // public void AddRestriction(int type)

@@ -15,17 +15,27 @@ namespace Softviz.Graph
         [SerializeField]
         private bool isFiltered;
 
+        // note(hrumy): All components should have a variable instead of 
+        //              getComponent() calls.
+        public NodeType  nodeType  = null;
+        public NodeLabel nodeLabel = null;
+
+        private Camera cam;
+
         public void Initialize(int id, Vector3 position)
         {
             this.id = id;
             // position = GameObject.FindGameObjectWithTag("CommunicationWrapper").transform.InverseTransformPoint(position);
 
+            cam = Camera.main;
+
             UpdatePosition(position);
         }
 
         private void Update() {
-            var label = GetComponent<NodeLabel>().label;
-            label.transform.rotation = Quaternion.LookRotation(label.transform.position - Camera.main.transform.position);
+            var label = nodeLabel.label;
+            label.transform.rotation = Quaternion.LookRotation(label.transform.position - cam.transform.position);
+            label.transform.position = nodeLabel.transform.position + new Vector3(0, 0.1f, 0) + label.transform.forward * -0.2f;
         }
 
         public virtual void UpdatePosition(Vector3 position)
@@ -49,7 +59,7 @@ namespace Softviz.Graph
             {
                 comp = gameObject.AddComponent(typeof(NodeShape)) as NodeShape;
             }
-            comp.SetShape(shape);
+            // comp.SetShape(shape);
         }
 
         public void UpdateColor(Color color)
@@ -101,23 +111,21 @@ namespace Softviz.Graph
 
         public void UpdateLabel(string label)
         {
-            var comp = GetComponent<NodeLabel>();
-            if (comp == null)
+            if (nodeLabel == null)
             {
-                comp = gameObject.AddComponent(typeof(NodeLabel)) as NodeLabel;
-                comp.SetLabel(label);
-                comp.label.SetActive(false);
+                nodeLabel = gameObject.AddComponent(typeof(NodeLabel)) as NodeLabel;
             }
+            nodeLabel.SetLabel(label);
+            nodeLabel.label.SetActive(false);
         }
 
         public void UpdateType(string type)
         {
-            var comp = GetComponent<NodeType>();
-            if (comp == null)
+            if (nodeType == null)
             {
-                comp = gameObject.AddComponent(typeof(NodeType)) as NodeType;
+                nodeType = gameObject.AddComponent(typeof(NodeType)) as NodeType;
             }
-            comp.SetNodeType(type);
+            nodeType.SetNodeType(type);
         }
 
         public void UpdateBody(string body)
