@@ -31,6 +31,9 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
         [SerializeField]
         [Tooltip("The object that the bounds control rig will be modifying.")]
         private GameObject targetObject;
+
+        public bool HIT_SPATIONAL_MAP = false;
+
         /// <summary>
         /// The object that the bounds control rig will be modifying.
         /// </summary>
@@ -760,22 +763,22 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
             }
         }
 
+        private Vector3 previousPosition;
+
         private void Update()
         {
+            // UnityEngine.RaycastHit hit;
+            // if (UnityPhysics.Raycast(transform.position, transform.forward, out hit)) {
+            //     if (hit.collider.gameObject.name.Contains("SpatialMappingChunk")) {
+            //         // Debug.Log("Hit Spatial Map");
+            //         HIT_SPATIONAL_MAP = true;
+            //     } else {
+            //         HIT_SPATIONAL_MAP = false;
+            //     }
+            // }
+
             if (active)
             {
-                UnityEngine.RaycastHit hit;
-                if (UnityPhysics.Raycast(transform.position, transform.forward, out hit)) {
-                    if (hit.collider.gameObject.name.Contains("SpatialMappingChunk")) {
-                        Debug.Log("Hit Spatial Map");
-                        //When the object hits the spatial map, move it back to the previous position
-                        // transform.position = previousPosition;
-                        // return;
-                    } else {
-                        Debug.Log("Hit something else: " + hit.collider.gameObject.name);
-                    }
-                }
-
                 if (currentPointer != null)
                 {
                     TransformTarget(currentHandleType);
@@ -799,6 +802,7 @@ namespace Microsoft.MixedReality.Toolkit.UI.BoundsControl
                     proximityEffect.UpdateScaling(TargetBounds.transform.TransformPoint(TargetBounds.center), currentBoundsExtents);
                 }
             }
+            previousPosition = transform.position; 
         }
 
         #endregion MonoBehaviour Methods

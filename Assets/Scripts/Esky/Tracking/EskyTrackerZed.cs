@@ -314,6 +314,7 @@ namespace BEERLabs.ProjectEsky.Tracking{
                     MeshCollider meshCollider = g.AddComponent<MeshCollider>();
                     meshCollider.sharedMesh = modifiedJunk.mesh;
 
+                    g.layer = LayerMask.NameToLayer("SPATIAL_MAP_LAYER");
                     g.transform.parent = MeshParent.transform;
                 }
                 else {                      

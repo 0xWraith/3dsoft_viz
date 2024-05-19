@@ -9,6 +9,18 @@ TagManager:
   - FxTemporaire
   - zomBunny
   - HandInteractionObject
+  - MRTKSceneContent
+  - CommunicationWrapper
+  - MagnetPanel
+  - RoomConfigPanel
+  - Graph
+  - nodesHolder
+  - XRMenu
+  - RestrictionWithMenu
+  - sphereXR
+  - Magnet
+  - RedMagnetPart
+  - XRNode
   layers:
   - Default
   - TransparentFX
@@ -30,7 +42,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - SPATIAL_MAP_LAYER
   - 
   - 
   - 

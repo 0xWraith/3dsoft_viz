@@ -117,7 +117,7 @@ public class InteractionTimer : MonoBehaviour
     }
 
     private void OnApplicationQuit() {
-        var fs = new FileStream("E:\\Hromada\\logs\\" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", FileMode.CreateNew, FileAccess.ReadWrite);
+        var fs = new FileStream("C:\\Users\\PC1\\Desktop\\logs\\" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt", FileMode.CreateNew, FileAccess.ReadWrite);
         using (var sw = new StreamWriter(fs))
         {
             sw.WriteLine("Total time:                     " + Time.realtimeSinceStartup + "s\n");
