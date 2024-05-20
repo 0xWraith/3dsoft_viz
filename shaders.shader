@@ -40,15 +40,13 @@ VOut VShader(float4 position : POSITION, float2 tex : TEXCOORD)
 }
 
 float2 WorldToViewportInnerVec(float4x4 inputPerspective, float3 worldPoint) {
-      float3 result;
-      result.x = inputPerspective[0][0] * worldPoint.x + inputPerspective[0][1] * worldPoint.y + inputPerspective[0][2] * worldPoint.z + inputPerspective[0][3];
-      result.y = inputPerspective[1][0] * worldPoint.x + inputPerspective[1][1] * worldPoint.y + inputPerspective[1][2] * worldPoint.z + inputPerspective[1][3];
-      result.z = inputPerspective[2][0] * worldPoint.x + inputPerspective[2][1] * worldPoint.y + inputPerspective[2][2] * worldPoint.z + inputPerspective[2][3];
-      float  w = inputPerspective[3][0] * worldPoint.x + inputPerspective[3][1] * worldPoint.y + inputPerspective[3][2] * worldPoint.z + inputPerspective[3][3];
-      result.x /= w; result.y /= w;
-      result.x = (result.x * 0.5 + 0.5);
-      result.y = (result.y * 0.5 + 0.5);
-      return result.xy;
+      float4 clipSpace = mul(inputPerspective, float4(worldPoint, 1.0));
+      
+      float4 screenPos  = clipSpace * 0.5f;
+      screenPos.xy = float2(screenPos.x, screenPos.y * 1.0) + screenPos.w;
+      screenPos.zw = clipSpace.zw;
+      
+      return screenPos.xy / screenPos.w;
 }
 
 float polyval2d(float X, float Y, float4x4 C) {
@@ -109,25 +107,25 @@ float4 resolveWithoutDistortion(float xSettled, float ySettled){
 float4 resolveWithDistortion(float xSettled, float ySettled){
     if(xSettled < 0.5){//we render the left eye
         float2 newTex = float2(xSettled*2,ySettled);// input quad UV in world space (should be between 0-1)
-        float3 rectilinear_coordinate = float3(polyval2d(1.0-newTex.x, newTex.y, rightUvToRectX),polyval2d(1.0 - newTex.x, newTex.y, rightUvToRectY), 1.0); //resolve the 2D polynomial to get a modified world space UV
-        float2 distorted_uv = WorldToViewportInnerVec(cameraMatrixRight,rectilinear_coordinate); //project back into screen space
-        distorted_uv += float2(offsets.z,offsets.w); //apply a screen space UV offset
+        float3 rectilinear_coordinate = float3(polyval2d(newTex.x, newTex.y, leftUvToRectX), -polyval2d(newTex.x, newTex.y, leftUvToRectY), -1.0); //resolve the 2D polynomial to get a modified world space UV
+        float2 distorted_uv = WorldToViewportInnerVec(cameraMatrixLeft,rectilinear_coordinate); //project back into screen space
+        //distorted_uv += float2(offsets.z,offsets.w); //apply a screen space UV offset
         if(toggleConfigs.x == 0.0){
             distorted_uv = resolveTemporalWarping(distorted_uv,DeltaPoseLeft);        //Should do things here for reprojection ....
         }
-        if(distorted_uv.x < eyeBordersRight.x || distorted_uv.x > eyeBordersRight.y || distorted_uv.y < eyeBordersRight.z || distorted_uv.y > eyeBordersRight.w)//ensure the UVS are within the set bounds for the eye
+        if(distorted_uv.x < eyeBordersLeft.x || distorted_uv.x > eyeBordersLeft.y || distorted_uv.y < eyeBordersLeft.z || distorted_uv.y > eyeBordersLeft.w)//ensure the UVS are within the set bounds for the eye
         return float4(0.0,0.0,0.0,1.0);//if outside, return black (prevent)
         else
         return txDiffuseLeft.Sample(samLinear, distorted_uv)* toggleConfigs.y;
     }else{//we render the right eye
         float2 newTex = float2((xSettled-0.5)*2,ySettled);  
-        float3 rectilinear_coordinate = float3(polyval2d(1.0-newTex.x, newTex.y, leftUvToRectX),polyval2d(1.0 - newTex.x, newTex.y, leftUvToRectY), 1.0);
-        float2 distorted_uv = WorldToViewportInnerVec(cameraMatrixLeft,rectilinear_coordinate);
-        distorted_uv += float2(offsets.x,offsets.y);
+        float3 rectilinear_coordinate = float3(polyval2d(newTex.x, newTex.y, rightUvToRectX), -polyval2d(newTex.x, newTex.y, rightUvToRectY), -1.0);
+        float2 distorted_uv = WorldToViewportInnerVec(cameraMatrixRight,rectilinear_coordinate);
+        //distorted_uv += float2(offsets.x,offsets.y);
         if(toggleConfigs.x == 0.0){
             distorted_uv = resolveTemporalWarping(distorted_uv,DeltaPoseRight);        
         }
-        if(distorted_uv.x < eyeBordersLeft.x || distorted_uv.x > eyeBordersLeft.y || distorted_uv.y < eyeBordersLeft.z || distorted_uv.y > eyeBordersLeft.w)
+        if(distorted_uv.x < eyeBordersRight.x || distorted_uv.x > eyeBordersRight.y || distorted_uv.y < eyeBordersRight.z || distorted_uv.y > eyeBordersRight.w)
         return float4(0.0,0.0,0.0,1.0);
         else
         return txDiffuseRight.Sample(samLinear, distorted_uv)* toggleConfigs.y;        
@@ -161,7 +159,12 @@ float4 resolveWithLuT(float xSettled, float ySettled){
 //note the left and right eyes are flipped due to the NorthStar rendering being upside down
 float4 PShader(float4 position : SV_POSITION, float2 tex: TEXCOORD) : SV_TARGET
 {
-    float xSettled = 1.0-(tex.x); // flip the X axis since the screen is upside down
+    float border = 0.0005;
+    float mid = abs(tex.x - 0.5);
+    if (tex.x  <= border || tex.x >= 1 - border || tex.y <= border || tex.y >= 1 - border || mid < border)
+        return float4(1.0,1.0,1.0,0.5);
+
+    float xSettled = tex.x; // flip the X axis since the screen is upside down
     float ySettled = tex.y; //we can use the raw Y
     return resolveWithDistortion(xSettled,ySettled);
 }

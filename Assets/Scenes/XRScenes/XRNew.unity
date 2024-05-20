@@ -32159,7 +32159,7 @@ GameObject:
   - component: {fileID: 2126951484}
   - component: {fileID: 2126951483}
   - component: {fileID: 2126951482}
-  - component: {fileID: 2126951481}
+  - component: {fileID: 2126951487}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -32182,29 +32182,6 @@ Transform:
   m_Father: {fileID: 502983518}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2126951481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2126951479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockCursorWhenFocusLocked: 1
-  setCursorInvisibleWhenFocusLocked: 0
-  maxGazeCollisionDistance: 10
-  raycastLayerMasks:
-  - serializedVersion: 2
-    m_Bits: 4294967291
-  stabilizer:
-    storedStabilitySamples: 60
-  gazeTransform: {fileID: 0}
-  minHeadVelocityThreshold: 0.5
-  maxHeadVelocityThreshold: 2
 --- !u!114 &2126951482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32286,7 +32263,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: dea79789f9e45004784e29644831c732, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -32296,6 +32273,29 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &2126951487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126951479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockCursorWhenFocusLocked: 1
+  setCursorInvisibleWhenFocusLocked: 0
+  maxGazeCollisionDistance: 10
+  raycastLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 4294967291
+  stabilizer:
+    storedStabilitySamples: 60
+  gazeTransform: {fileID: 0}
+  minHeadVelocityThreshold: 0.5
+  maxHeadVelocityThreshold: 2
 --- !u!1 &2130007036
 GameObject:
   m_ObjectHideFlags: 0
@@ -82056,8 +82056,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53e7105d23f96aa40a2eb4bc761da58d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundsControlCollider: {fileID: 2885924767904130765}
-  spatialMapCollider: {fileID: 8949359725073049486}
 --- !u!65 &8949359725073049486
 BoxCollider:
   m_ObjectHideFlags: 0

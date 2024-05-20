@@ -585,7 +585,7 @@ MonoBehaviour:
     RightRenderTexture: {fileID: 0}
     LeftCamera: {fileID: 8316358254129809571}
     RightCamera: {fileID: 8316358255470071585}
-    RequiresRotation: 1
+    RequiresRotation: 0
     LeftProjectionMatrix: []
     RightProjectionMatrix: []
     LeftInvProjectionMatrix: []

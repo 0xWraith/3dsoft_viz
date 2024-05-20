@@ -256,9 +256,9 @@ namespace BEERLabs.ProjectEsky.Rendering{
         }
         IEnumerator CallPluginAtEndOfFrame(int id) {
             yield return new WaitForEndOfFrame();
-            IntPtr ptrLeft = renderTextureSettings.RightRenderTexture.GetNativeTexturePtr();
+            IntPtr ptrLeft = renderTextureSettings.LeftRenderTexture.GetNativeTexturePtr();
             SendTextureIdToPluginByIdLeft(id, ptrLeft);
-            IntPtr ptrRight = renderTextureSettings.LeftRenderTexture.GetNativeTexturePtr();
+            IntPtr ptrRight = renderTextureSettings.RightRenderTexture.GetNativeTexturePtr();
             SendTextureIdToPluginByIdRight(id, ptrRight);        
             IntPtr ptrRightLuT = LookUpTextureSettings.RightLookUpTexture.GetNativeTexturePtr();
             IntPtr ptrLeftLuT = LookUpTextureSettings.LeftLookUpTexture.GetNativeTexturePtr();                        

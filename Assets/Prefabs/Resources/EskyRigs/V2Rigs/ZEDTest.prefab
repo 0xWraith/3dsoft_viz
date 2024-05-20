@@ -867,7 +867,7 @@ MonoBehaviour:
     RightRenderTexture: {fileID: 0}
     LeftCamera: {fileID: 1353376736918173088}
     RightCamera: {fileID: 4402976967670336123}
-    RequiresRotation: 1
+    RequiresRotation: 0
     LeftProjectionMatrix: []
     RightProjectionMatrix: []
     LeftInvProjectionMatrix: []
@@ -1171,6 +1171,7 @@ GameObject:
   - component: {fileID: 606300671412568836}
   - component: {fileID: 1973362587441372959}
   - component: {fileID: 4455919804585908073}
+  - component: {fileID: 8419289223547707362}
   m_Layer: 0
   m_Name: PreviewCamera
   m_TagString: Untagged
@@ -1245,3 +1246,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8471157175708360469}
   m_Enabled: 0
+--- !u!114 &8419289223547707362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8471157175708360469}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae2652e05e88e54d98f2d8adb8c042a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 4aefb5f00bbd6574eb76ae063122d0a8, type: 2}
+  renderTexture: {fileID: 8400000, guid: dea79789f9e45004784e29644831c732, type: 2}
+  pixelColor: {r: 0.8773585, g: 0.121395424, b: 0.121395424, a: 1}
+  pixelCoord: {x: 0, y: 0}
